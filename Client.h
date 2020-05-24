@@ -1,8 +1,10 @@
 #include <vector>
 
+#include "Protocol.h"
+
 class Client {
 private:
-  int algo;
+  Protocol protocol;
 public:
   Client();
 
@@ -10,7 +12,7 @@ public:
 
   int send(std::vector<char>& msg);
 
-  int recv() {
-    
-  }
+  int recv();
+
+  int run();
 };
