@@ -21,6 +21,11 @@ public:
   void process_msg(int num, std::string& response);
 
   void process_msg(char c, std::string& response);
+
+private:
+  int score_guess(int guess, std::string& response);
+
+  void generate_score_response(int good, int regular, std::string& response);
 };
 
 #endif
