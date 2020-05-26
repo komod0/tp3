@@ -136,3 +136,8 @@ void Socket::s_recv(char* buffer, size_t length) {
     }
   }
 }
+
+void Socket::shutdown_close() {
+  shutdown(fd, SHUT_RDWR);
+  close(fd);
+}

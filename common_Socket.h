@@ -6,6 +6,7 @@
 class Socket {
 private:
   int fd;
+
 public:
   explicit Socket(int file_des);
 
@@ -32,6 +33,8 @@ public:
   void s_send(const char* msg, size_t length);
 
   void s_recv(char* buffer, size_t length);
+
+  void shutdown_close();
 
 private:
 void get_addr_list(struct addrinfo **addr_list, const char* host,
