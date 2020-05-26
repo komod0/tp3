@@ -1,19 +1,25 @@
 #ifndef SERVER_H
 #define SERVER_H
 
-#include "common_Protocol.h"
-#include "common_Socket.h"
+#include <string>
+#include <vector>
 
-class ClientHandler {
+#include "common_Protocol.h"
+#include "common_Scorer.h"
+#include "common_Socket.h"
+#include "common_Thread.h"
+
+class ClientHandler: public Thread{
 private:
   int remaining_attempts;
   bool game_over;
   int secret_number;
-  Protocol protocol;
-  Socket sock;
   Socket peer;
+  Protocol protocol;
+  Scorer &score;
+
 public:
-  ClientHandler(int num);
+  ClientHandler(int num, Socket sock, Scorer &sc);
 
   ~ClientHandler();
 
@@ -31,8 +37,6 @@ public:
 
   void accept();
 
-  void bind_and_listen(const char* serv);
-
   void send(const std::string &msg);
 
   void recv(std::vector<char> &buffer, size_t length);
@@ -40,6 +44,8 @@ public:
   void process_msg(const int &guess, std::string& response);
 
   void process_msg(char c, std::string& response);
+
+  bool finished();
 
 private:
   int score_guess(const int &guess, std::string& response);

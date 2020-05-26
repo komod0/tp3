@@ -1,13 +1,19 @@
+#include <string>
+#include <vector>
+
 #include "common_client_handler.h"
 #include "common_utilities.h"
 
 #define INITIAL_ATTEMPTS 10
 #define NUM_OF_DIGITS 3
 
-ClientHandler::ClientHandler(int num)
+ClientHandler::ClientHandler(int num, Socket sock, Scorer &sc)
   : remaining_attempts(INITIAL_ATTEMPTS),
     game_over(false),
-    secret_number(num) {}
+    secret_number(num),
+    score(sc) {
+      peer = std::move(sock);
+    }
 
 ClientHandler::~ClientHandler() {}
 
@@ -17,7 +23,6 @@ void ClientHandler::run() {
   while (!game_over) {
     encoded_resp.clear();
     protocol.recv_command_and_process(*this, response);
-    std::cout << response << std::endl;
     protocol.encode_str(response, encoded_resp);
     send(encoded_resp);
   }
@@ -32,36 +37,32 @@ void ClientHandler::send(const std::string &msg) {
   peer.s_send(msg.c_str(), msg.length());
 }
 
-void ClientHandler::accept() {
-  peer = sock.s_accept();
-}
-
-void ClientHandler::bind_and_listen(const char* serv) {
-  sock.s_bind(serv);
-  sock.s_listen();
-}
-
 void ClientHandler::process_msg(char c, std::string& response) {
   if (c == 's') {
     game_over = true;
-    // Aca se aumentaria el contador de perdidos en 1
+    score.increase_loss();
     response = "Perdiste";
   } else {
-    response = "Comandos válidos:\n\tAYUDA: despliega la lista de comandos \
-válidos\n\tRENDIRSE: pierde el juego automáticamente\n\tXXX: Número de \
-3 cifras a ser enviado al servidor para adivinar el número secreto";
+    response = "Comandos válidos:\n\tAYUDA: despliega la lista de comandos "
+    "válidos\n\tRENDIRSE: pierde el juego automáticamente\n\tXXX: Número de "
+    "3 cifras a ser enviado al servidor para adivinar el número secreto";
   }
 }
 
 void ClientHandler::process_msg(const int &guess, std::string& response) {
   remaining_attempts -= 1;
+  std::cout << "intentos restantes:" << remaining_attempts << std::endl;
   std::string aux = std::to_string(guess);
   if (aux.length() != NUM_OF_DIGITS || !non_repeating_string(aux)) {
     response = "Número inválido. Debe ser de 3 cifras no repetidas";
     return;
   }
-  if (score_guess(guess, response) == NUM_OF_DIGITS||remaining_attempts == 0) {
+  if (score_guess(guess, response) == NUM_OF_DIGITS) {
     game_over = true;
+    score.increase_wins();
+  } else if (remaining_attempts == 0) {
+    game_over = true;
+    score.increase_loss();
   }
 }
 
@@ -98,4 +99,8 @@ void ClientHandler::generate_score_response(const int &good, const int &regular,
   } else {
     response = std::to_string(NUM_OF_DIGITS) + " mal";
   }
+}
+
+bool ClientHandler::finished() {
+  return game_over;
 }
