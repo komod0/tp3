@@ -16,7 +16,7 @@ void Scorer::increase_loss() {
 
 std::ostream& operator<<(std::ostream& os, const Scorer &sc)
 {
-    os << "Estadísticas:\n\tGanadores: " << sc.wins << "\n\tPerdedores: " << 
+    os << "Estadísticas:\n\tGanadores:  " << sc.wins << "\n\tPerdedores: " << 
     sc.losses << "\n";
     return os;
 }

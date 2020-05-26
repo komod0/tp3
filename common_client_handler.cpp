@@ -1,4 +1,5 @@
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "common_client_handler.h"
@@ -26,7 +27,6 @@ void ClientHandler::run() {
     protocol.encode_str(response, encoded_resp);
     send(encoded_resp);
   }
-  std::cout << "It's a game over!\n";
 }
 
 void ClientHandler::recv(std::vector<char> &buffer, size_t length) {
@@ -51,7 +51,6 @@ void ClientHandler::process_msg(char c, std::string& response) {
 
 void ClientHandler::process_msg(const int &guess, std::string& response) {
   remaining_attempts -= 1;
-  std::cout << "intentos restantes:" << remaining_attempts << std::endl;
   std::string aux = std::to_string(guess);
   if (aux.length() != NUM_OF_DIGITS || !non_repeating_string(aux)) {
     response = "Número inválido. Debe ser de 3 cifras no repetidas";
