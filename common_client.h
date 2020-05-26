@@ -10,6 +10,7 @@ class Client {
 private:
   Protocol protocol;
   Socket sock;
+
 public:
   Client();
 
@@ -24,6 +25,8 @@ public:
   Client(Client &&other);
 
   Client& operator=(Client &&other);
+
+  void operator()();
 
   void connect(const char* host, const char* service);
 

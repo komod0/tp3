@@ -4,6 +4,7 @@
 #include <arpa/inet.h>
 #include <string>
 #include <string.h>
+#include <vector>
 
 enum exit_codes{SUCCESS, ERROR};
 
@@ -14,6 +15,10 @@ Client::Client() {
 }
 
 Client::~Client() {
+}
+
+void Client::operator()() {
+  run();
 }
 
 void Client::connect(const char* host, const char* service) {
