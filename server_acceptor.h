@@ -12,6 +12,7 @@ private:
   std::vector<int> numbers;
   std::atomic<bool> keep_talking;
   Scorer score;
+
 public:
   Acceptor(const char* serv, std::vector<int> &nums);
 

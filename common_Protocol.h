@@ -12,7 +12,6 @@ class ClientHandler;
 
 class Protocol {
 private:
-  int ALGO;
 public:
   Protocol();
 

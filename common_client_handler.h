@@ -27,11 +27,9 @@ public:
 
   ClientHandler& operator=(const ClientHandler &other) = delete;
   
-  // VER DE IMPLEMENTAR EL CONSTRUCTOR POR MOVIMIENTO, SINO MANDAR delete.
+  ClientHandler(ClientHandler &&other) = delete;
 
-  ClientHandler(ClientHandler &&other);
-
-  ClientHandler& operator=(ClientHandler &&other);
+  ClientHandler& operator=(ClientHandler &&other) = delete;
 
   void run();
 

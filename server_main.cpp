@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "common_client_handler.h"
+#include "common_SocketExcept.h"
 #include "server_acceptor.h"
 
 enum exit_codes{SUCCESS, ERROR};
@@ -24,7 +25,12 @@ int main(int argc, const char* argv[]) {
   }
 
   Acceptor client_acceptor(argv[1], numbers);
-  client_acceptor.start();
+  try {
+    client_acceptor.start();
+  } catch(SocketException &e) {
+    std::cerr << e.what() << std::endl;
+    return ERROR;
+  }
 
   std::string usr_input = "";
   while (usr_input != "q") {
