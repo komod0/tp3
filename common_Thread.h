@@ -1,3 +1,6 @@
+#ifndef THREAD_H
+#define THREAD_H
+
 #include <thread>
 
 class Thread {
@@ -22,3 +25,5 @@ public:
 
   void join();
 };
+
+#endif

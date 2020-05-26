@@ -1,9 +1,9 @@
-#include "Thread.h"
+#include "common_Thread.h"
 
 
-Thread::Thread() {};
+Thread::Thread() {}
 
-Thread::~Thread() {};
+Thread::~Thread() {}
 
 Thread::Thread(Thread&& other) {  // Move
     this->thread = std::move(other.thread);
