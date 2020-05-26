@@ -7,7 +7,7 @@
 #include <arpa/inet.h>
 
 class Client;
-class Server;
+class ClientHandler;
 
 class Protocol {
 private:
@@ -31,7 +31,7 @@ public:
 
   void msg_recv(Client &cli, std::string &resp) const;
 
-  void recv_command_and_process(Server& server, 
+  void recv_command_and_process(ClientHandler& server, 
                                 std::string& response) const;
 };
 

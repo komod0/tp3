@@ -6,7 +6,7 @@
 #include "common_utilities.h"
 #include "common_Protocol.h"
 #include "common_client.h"
-#include "common_server.h"
+#include "common_client_handler.h"
 
 #define HELP "AYUDA"
 #define SURRENDER "RENDIRSE"
@@ -58,19 +58,19 @@ void Protocol::encode_str(const std::string& msg, std::string& buff) const {
   buff.append(msg);
 }
 
-void Protocol::recv_command_and_process(Server& server, 
+void Protocol::recv_command_and_process(ClientHandler& handler, 
                                         std::string& response) const{
   uint16_t guess;
   std::vector<char> aux;
   aux.resize(1);
-  server.recv(aux, 1);
+  handler.recv(aux, 1);
   if (aux[0] == 'n') {
     // Aca leeria 2 bytes del socket
     aux.resize(SIZEOF_GUESS);
-    server.recv(aux, SIZEOF_GUESS);
+    handler.recv(aux, SIZEOF_GUESS);
     guess = ntohs(*(int*)(aux.data()));
-    server.process_msg(guess, response);
+    handler.process_msg(guess, response);
   } else {
-    server.process_msg(aux[0], response);
+    handler.process_msg(aux[0], response);
   }
 }

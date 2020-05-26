@@ -1,17 +1,17 @@
-#include "common_server.h"
+#include "common_client_handler.h"
 #include "common_utilities.h"
 
 #define INITIAL_ATTEMPTS 10
 #define NUM_OF_DIGITS 3
 
-Server::Server(int num)
+ClientHandler::ClientHandler(int num)
   : remaining_attempts(INITIAL_ATTEMPTS),
     game_over(false),
     secret_number(num) {}
 
-Server::~Server() {}
+ClientHandler::~ClientHandler() {}
 
-void Server::run() {
+void ClientHandler::run() {
   std::string response;
   std::string encoded_resp;
   while (!game_over) {
@@ -24,24 +24,24 @@ void Server::run() {
   std::cout << "It's a game over!\n";
 }
 
-void Server::recv(std::vector<char> &buffer, size_t length) {
+void ClientHandler::recv(std::vector<char> &buffer, size_t length) {
   peer.s_recv(buffer.data(), length);
 }
 
-void Server::send(const std::string &msg) {
+void ClientHandler::send(const std::string &msg) {
   peer.s_send(msg.c_str(), msg.length());
 }
 
-void Server::accept() {
+void ClientHandler::accept() {
   peer = sock.s_accept();
 }
 
-void Server::bind_and_listen(const char* serv) {
+void ClientHandler::bind_and_listen(const char* serv) {
   sock.s_bind(serv);
   sock.s_listen();
 }
 
-void Server::process_msg(char c, std::string& response) {
+void ClientHandler::process_msg(char c, std::string& response) {
   if (c == 's') {
     game_over = true;
     // Aca se aumentaria el contador de perdidos en 1
@@ -53,7 +53,7 @@ válidos\n\tRENDIRSE: pierde el juego automáticamente\n\tXXX: Número de \
   }
 }
 
-void Server::process_msg(const int &guess, std::string& response) {
+void ClientHandler::process_msg(const int &guess, std::string& response) {
   remaining_attempts -= 1;
   std::string aux = std::to_string(guess);
   if (aux.length() != NUM_OF_DIGITS || !non_repeating_string(aux)) {
@@ -65,7 +65,7 @@ void Server::process_msg(const int &guess, std::string& response) {
   }
 }
 
-int Server::score_guess(const int &guess, std::string& response) {
+int ClientHandler::score_guess(const int &guess, std::string& response) {
   std::string secret = std::to_string(secret_number);
   std::string guess_s = std::to_string(guess);
   int good = 0;
@@ -82,7 +82,7 @@ int Server::score_guess(const int &guess, std::string& response) {
   return good;
 }
 
-void Server::generate_score_response(const int &good, const int &regular,
+void ClientHandler::generate_score_response(const int &good, const int &regular,
                                      std::string& response) {
   if (good == NUM_OF_DIGITS) {
     response = "Ganaste";

@@ -4,7 +4,7 @@
 #include "common_Protocol.h"
 #include "common_Socket.h"
 
-class Server {
+class ClientHandler {
 private:
   int remaining_attempts;
   bool game_over;
@@ -13,19 +13,19 @@ private:
   Socket sock;
   Socket peer;
 public:
-  Server(int num);
+  ClientHandler(int num);
 
-  ~Server();
+  ~ClientHandler();
 
-  Server(const Server &other) = delete; // No copy
+  ClientHandler(const ClientHandler &other) = delete; // No copy
 
-  Server& operator=(const Server &other) = delete;
+  ClientHandler& operator=(const ClientHandler &other) = delete;
   
   // VER DE IMPLEMENTAR EL CONSTRUCTOR POR MOVIMIENTO, SINO MANDAR delete.
 
-  Server(Server &&other);
+  ClientHandler(ClientHandler &&other);
 
-  Server& operator=(Server &&other);
+  ClientHandler& operator=(ClientHandler &&other);
 
   void run();
 
