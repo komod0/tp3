@@ -1,6 +1,7 @@
 #include <cstdint>
 #include <arpa/inet.h>
-
+#include <string>
+#include <vector>
 #include <stdio.h>
 
 #include "common_utilities.h"
@@ -25,7 +26,7 @@ int Protocol::encode_command(const std::string& command,
     msg.push_back('h');
   } else if (command == SURRENDER) {
     msg.push_back('s');
-  } else if(is_uint16(command)) {
+  } else if (is_uint16(command)) {
     msg.push_back('n');
     uint16_t num = std::stoi(command);
     num = htons(num);

@@ -1,3 +1,5 @@
+#include <string>
+
 #include "common_utilities.h"
 
 bool is_uint16(const std::string& s) {

@@ -18,7 +18,7 @@ int main(int argc, const char* argv[]) {
   Client cli = Client();
   try {
     cli.connect(argv[1], argv[2]);
-    cli.run();
+    cli();
   } catch(SocketException &e) {
     std::cerr << e.what() << std::endl;
     status = ERROR;
